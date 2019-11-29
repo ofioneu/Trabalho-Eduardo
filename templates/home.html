@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8"></script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <title>Document</title>
+</head>
+<body style="background: rgb(83, 117, 182);" >
+    
+
+        <script>
+                var socket = io();
+                socket.on('connect', function() {
+                    socket.emit('message', {status: 'CONECTADO!'});
+                });
+                        
+                        
+                
+            </script>
+    
+    <figure class="highcharts-figure">
+            <div id="container"></div>
+            <script>
+                socket.on('message', function(data) {
+                         console.log("teste: ", data)
+                         rel_dados= JSON.parse(data)
+                         console.log('Aqui está dados_uni_name: ', rel_dados.dados_uni_name)
+                         console.log('Aqui está mensalidade: ', rel_dados.dados_mens)
+                         dados_uni_name=rel_dados.dados_uni_name
+                         dados_mens=rel_dados.dados_mens
+                        //console.log(data)                   
+                                    
+ Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Relação de valores de mensalidades por estado'
+                    },
+                    subtitle: {
+                        text: 'Acima de R$3000,00'
+                    },
+                    xAxis: {
+                        categories: dados_uni_name,
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Preço (R$)'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            '<td style="padding:0"><b>{point.y:.1f} R$</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Mesalidades',
+                        data:  dados_mens
+
+                    }]
+                });
+                        
+                    
+                       
+                          
+                    });
+                
+                </script>
+            </p>
+        </figure>
+        
+          
+
+            
+    
+</body>
+</html>
